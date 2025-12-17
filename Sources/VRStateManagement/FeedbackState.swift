@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 /// Reusable state pattern for user feedback (errors, success messages, dialogs)
 @frozen
