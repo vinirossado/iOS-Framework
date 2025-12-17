@@ -106,6 +106,32 @@ public struct CustomDialog: Identifiable, Equatable, Sendable {
     public static func == (lhs: CustomDialog, rhs: CustomDialog) -> Bool {
         lhs.id == rhs.id
     }
+
+    // Convenience initializers for common scenarios
+    static func destructive(
+        title: String,
+        message: String,
+        icon: String = "xmark.circle.fill",
+        confirmTitle: String = "Delete",
+        onConfirm: @escaping @MainActor @Sendable () -> Void
+    ) -> CustomDialog {
+        CustomDialog(
+            title: title,
+            message: message,
+            icon: icon,
+            iconColor: .orange,  // Mais suave que vermelho
+            primaryButton: DialogButton(
+                title: confirmTitle,
+                role: .destructive,
+                action: onConfirm
+            ),
+            secondaryButton: DialogButton(
+                title: "Cancel",
+                role: .cancel,
+                action: {}
+            )
+        )
+    }
 }
 
 /// Dialog button model
