@@ -97,7 +97,7 @@ public struct CustomDialogView: View {
                     Text(dialog.title)
                         .font(theme.fontTitle2)
                         .fontWeight(.bold)
-                        .foregroundColor(theme.textPrimary)
+                        .foregroundColor(theme.textPrimaryColor)
                     
                     Text(dialog.message)
                         .font(theme.fontBody)
@@ -132,7 +132,7 @@ public struct CustomDialogView: View {
                         }) {
                             Text(secondaryButton.title)
                                 .font(theme.fontHeadline)
-                                .foregroundColor(theme.textPrimary)
+                                .foregroundColor(theme.textPrimaryColor)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, theme.spacingMD)
                                 .background(Color.gray.opacity(0.2))
@@ -146,12 +146,12 @@ public struct CustomDialogView: View {
             .frame(maxWidth: 340)
             .background(
                 RoundedRectangle(cornerRadius: theme.cornerRadiusLG)
-                    .fill(theme.surface)
+                    .fill(theme.surfaceColor)
                     .shadow(
                         color: theme.shadowColor,
                         radius: theme.shadowRadius,
-                        x: theme.shadowOffsetX,
-                        y: theme.shadowOffsetY
+                        x: theme.shadowX,
+                        y: theme.shadowY
                     )
             )
         }
@@ -165,7 +165,7 @@ public struct CustomDialogView: View {
         case .cancel:
             return Color.gray
         case .default:
-            return theme.primary
+            return theme.primaryColor
         }
     }
     
