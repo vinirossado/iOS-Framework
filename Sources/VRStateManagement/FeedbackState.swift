@@ -113,6 +113,7 @@ public struct CustomDialog: Identifiable, Equatable, Sendable {
         title: String,
         message: String,
         icon: String = "xmark.circle.fill",
+        iconColor: string = "#c0392b",
         confirmTitle: String = "Delete",
         onConfirm: @escaping @MainActor @Sendable () -> Void
     ) -> CustomDialog {
