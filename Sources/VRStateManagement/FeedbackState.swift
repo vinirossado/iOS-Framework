@@ -87,22 +87,6 @@ public struct CustomDialog: Identifiable, Equatable, Sendable {
     public let primaryButton: DialogButton
     public let secondaryButton: DialogButton?
 
-    struct DialogButton: Equatable {
-        let title: String
-        let role: ButtonRole
-        let action: @MainActor @Sendable () -> Void
-
-        enum ButtonRole {
-            case destructive
-            case cancel
-            case `default`
-        }
-
-        static func == (lhs: DialogButton, rhs: DialogButton) -> Bool {
-            lhs.title == rhs.title && lhs.role == rhs.role
-        }
-    }
-
     public init(
         title: String,
         message: String,
@@ -125,28 +109,28 @@ public struct CustomDialog: Identifiable, Equatable, Sendable {
 }
 
 /// Dialog button model
-// public struct DialogButton: Equatable, Sendable {
-//     public let title: String
-//     public let role: ButtonRole
-//     public let action: (@MainActor () -> Void)?
+public struct DialogButton: Equatable, Sendable {
+    public let title: String
+    public let role: ButtonRole
+    public let action: (@MainActor () -> Void)?
 
-//     public init(
-//         title: String,
-//         role: ButtonRole = .default,
-//         action: (@MainActor () -> Void)? = nil
-//     ) {
-//         self.title = title
-//         self.role = role
-//         self.action = action
-//     }
+    public init(
+        title: String,
+        role: ButtonRole = .default,
+        action: (@MainActor () -> Void)? = nil
+    ) {
+        self.title = title
+        self.role = role
+        self.action = action
+    }
 
-//     public static func == (lhs: DialogButton, rhs: DialogButton) -> Bool {
-//         lhs.title == rhs.title && lhs.role == rhs.role
-//     }
+    public static func == (lhs: DialogButton, rhs: DialogButton) -> Bool {
+        lhs.title == rhs.title && lhs.role == rhs.role
+    }
 
-//     public enum ButtonRole: Equatable, Sendable {
-//         case `default`
-//         case cancel
-//         case destructive
-//     }
-// }
+    public enum ButtonRole: Equatable, Sendable {
+        case `default`
+        case cancel
+        case destructive
+    }
+}
