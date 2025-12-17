@@ -101,7 +101,7 @@ public struct CustomDialogView: View {
                     
                     Text(dialog.message)
                         .font(theme.fontBody)
-                        .foregroundColor(theme.textSecondary)
+                        .foregroundColor(theme.textSecondaryColor)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, theme.spacingMD)
                 }
