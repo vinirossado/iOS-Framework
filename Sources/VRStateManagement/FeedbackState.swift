@@ -120,7 +120,7 @@ public struct CustomDialog: Identifiable, Equatable, Sendable {
             title: title,
             message: message,
             icon: icon,
-            iconColor: Color.orange,
+            iconColor: iconColor,
             primaryButton: DialogButton(
                 title: confirmTitle,
                 role: .destructive,
