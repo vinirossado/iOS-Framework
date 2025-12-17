@@ -19,7 +19,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.9.0"),
-        .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "7.0.0"),
+        .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "9.0.0"),
     ],
     targets: [
         .target(
