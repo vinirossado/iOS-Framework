@@ -114,7 +114,11 @@ public struct DialogButton: Equatable, Sendable {
     public let role: ButtonRole
     public let action: (@MainActor () -> Void)?
 
-    public init(title: String, role: ButtonRole = .default, action: (() -> Void)? = nil) {
+    public init(
+        title: String,
+        role: ButtonRole = .default,
+        action: (@MainActor () -> Void)? = nil
+    ) {
         self.title = title
         self.role = role
         self.action = action
