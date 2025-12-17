@@ -6,23 +6,20 @@ public struct BannerView: View {
     @Environment(\.appTheme) private var theme
 
     let type: BannerType
+    let title: String
     let message: String
-    let actionTitle: String?
     let onDismiss: () -> Void
-    let onAction: (() -> Void)?
 
     public init(
         type: BannerType,
+        title: String,
         message: String,
-        actionTitle: String? = nil,
-        onDismiss: @escaping () -> Void,
-        onAction: (() -> Void)? = nil
+        onDismiss: @escaping () -> Void
     ) {
         self.type = type
+        self.title = title
         self.message = message
-        self.actionTitle = actionTitle
         self.onDismiss = onDismiss
-        self.onAction = onAction
     }
 
     public var body: some View {
@@ -30,17 +27,17 @@ public struct BannerView: View {
             Image(systemName: iconName)
                 .foregroundColor(textColor)
 
-            Text(message)
-                .font(theme.fontBody)
-                .foregroundColor(textColor)
-
-            Spacer()
-
-            if let actionTitle, let onAction {
-                Button(actionTitle, action: onAction)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
                     .font(theme.fontCallout.bold())
                     .foregroundColor(textColor)
+                
+                Text(message)
+                    .font(theme.fontCaption)
+                    .foregroundColor(textColor)
             }
+
+            Spacer()
 
             Button(action: onDismiss) {
                 Image(systemName: "xmark")
@@ -104,10 +101,9 @@ struct BannerModifier: ViewModifier {
             if let errorBanner = feedbackState.errorBanner {
                 BannerView(
                     type: .error,
+                    title: errorBanner.title,
                     message: errorBanner.message,
-                    actionTitle: errorBanner.actionTitle,
-                    onDismiss: { feedbackState = .none },
-                    onAction: errorBanner.action
+                    onDismiss: { feedbackState = .none }
                 )
                 .padding()
                 .transition(.move(edge: .top).combined(with: .opacity))
@@ -116,14 +112,14 @@ struct BannerModifier: ViewModifier {
             if let successBanner = feedbackState.successBanner {
                 BannerView(
                     type: .success,
+                    title: successBanner.title,
                     message: successBanner.message,
                     onDismiss: { feedbackState = .none }
                 )
                 .padding()
                 .transition(.move(edge: .top).combined(with: .opacity))
                 .task {
-                    try? await Task.sleep(
-                        nanoseconds: UInt64(successBanner.duration * 1_000_000_000))
+                    try? await Task.sleep(nanoseconds: 3_000_000_000) // 3 seconds
                     feedbackState = .none
                 }
             }

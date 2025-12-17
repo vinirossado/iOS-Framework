@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Environment key for app theme
 struct ThemeEnvironmentKey: EnvironmentKey {
-    static let defaultValue: any AppTheme = DefaultTheme()
+    @MainActor static let defaultValue: any AppTheme = DefaultTheme()
 }
 
 extension EnvironmentValues {

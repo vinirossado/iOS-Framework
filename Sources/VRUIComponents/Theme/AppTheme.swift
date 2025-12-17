@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Protocol that defines all theme properties for the app
 /// Each app implements this protocol to provide custom styling
-public protocol AppTheme {
+public protocol AppTheme: Sendable {
     // MARK: - Colors
     var primaryColor: Color { get }
     var secondaryColor: Color { get }
