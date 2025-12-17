@@ -45,7 +45,6 @@ let package = Package(
         .target(
             name: "VRUIComponents",
             dependencies: ["VRStateManagement"],
-            resources: [.process("Resources")]
         ),
         .testTarget(name: "VRStateManagementTests", dependencies: ["VRStateManagement"]),
         .testTarget(name: "VRNetworkingTests", dependencies: ["VRNetworking"]),
