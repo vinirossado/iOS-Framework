@@ -96,3 +96,31 @@ struct DialogButtonView: View {
         }
     }
 }
+
+// MARK: - View Extension for Custom Dialog
+
+extension View {
+    /// Display custom dialog using CustomDialog binding
+    public func customDialog(_ dialog: Binding<CustomDialog?>) -> some View {
+        self.modifier(CustomDialogModifier(dialog: dialog))
+    }
+}
+
+struct CustomDialogModifier: ViewModifier {
+    @Binding var dialog: CustomDialog?
+    
+    func body(content: Content) -> some View {
+        ZStack {
+            content
+            
+            if let dialog = dialog {
+                CustomDialogView(
+                    dialog: dialog,
+                    onDismiss: { self.dialog = nil }
+                )
+                .transition(.opacity)
+            }
+        }
+        .animation(.spring(), value: dialog?.id)
+    }
+}

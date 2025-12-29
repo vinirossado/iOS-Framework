@@ -109,7 +109,7 @@ public struct CustomDialog: Identifiable, Equatable, Sendable {
     }
 
     // Convenience initializers for common scenarios
-    static func destructive(
+    public static func destructive(
         title: String,
         message: String,
         icon: String = "xmark.circle.fill",
