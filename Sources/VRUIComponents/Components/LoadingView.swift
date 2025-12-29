@@ -11,9 +11,9 @@ public struct LoadingView: View {
     }
     
     public var body: some View {
-        VStack(spacing: theme.spacingMD) {
+        VStack(spacing: 16) {
             ProgressView()
-                .tint(theme.primaryColor)
+                .tint(.blue)
             
             if let message {
                 Text(message)
@@ -21,6 +21,6 @@ public struct LoadingView: View {
                     .foregroundColor(theme.textSecondaryColor)
             }
         }
-        .padding(theme.spacingXL)
+        .padding(32)
     }
 }
