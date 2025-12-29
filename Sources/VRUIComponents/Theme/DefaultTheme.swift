@@ -12,11 +12,11 @@ public struct DefaultTheme: AppTheme {
     public var backgroundColor: Color = Color(.systemBackground)
     public var surfaceColor: Color = Color(.secondarySystemBackground)
     
-    // Banner colors - Modern, soft, and harmonious
-    public var errorColor: Color = Color(red: 0.95, green: 0.42, blue: 0.45) // #F26B73 - Soft coral pink
-    public var successColor: Color = Color(red: 0.40, green: 0.80, blue: 0.67) // #66CCAA - Mint green
-    public var warningColor: Color = Color(red: 0.98, green: 0.72, blue: 0.35) // #FAB859 - Soft golden yellow
-    public var infoColor: Color = Color(red: 0.52, green: 0.71, blue: 0.96) // #85B5F5 - Soft sky blue
+    // Default semantic colors - Apps should override these in their custom theme
+    public var errorColor: Color = .red
+    public var successColor: Color = .green
+    public var warningColor: Color = .orange
+    public var infoColor: Color = .blue
 
     // Text Colors
     public var textPrimaryColor: Color = Color(.label)
