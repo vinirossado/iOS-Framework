@@ -17,7 +17,7 @@ public struct LoadingView: View {
             
             if let message {
                 Text(message)
-                    .font(theme.fontBody)
+                    .font(.body)
                     .foregroundColor(theme.textSecondaryColor)
             }
         }
