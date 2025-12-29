@@ -5,15 +5,15 @@ import VRStateManagement
 /// Uses only textPrimaryColor and textSecondaryColor from AppTheme, all other styling is built-in
 public struct CustomDialogView: View {
     @Environment(\.appTheme) private var theme
-    
+
     let dialog: CustomDialog
     let onDismiss: () -> Void
-    
+
     public init(dialog: CustomDialog, onDismiss: @escaping () -> Void) {
         self.dialog = dialog
         self.onDismiss = onDismiss
     }
-    
+
     public var body: some View {
         ZStack {
             Color.black.opacity(0.4)
@@ -21,19 +21,19 @@ public struct CustomDialogView: View {
                 .onTapGesture {
                     onDismiss()
                 }
-            
+
             VStack(spacing: 16) {
                 // Icon
                 Image(systemName: dialog.icon)
                     .font(.system(size: 50))
                     .foregroundColor(Color(hex: dialog.iconColor))
-                
+
                 // Title and Message
                 VStack(spacing: 16) {
                     Text(dialog.title)
                         .font(.title2)
                         .foregroundColor(theme.textPrimaryColor)
-                    
+
                     Text(dialog.message)
                         .font(.body)
                         .foregroundColor(theme.textSecondaryColor)
@@ -41,14 +41,14 @@ public struct CustomDialogView: View {
                         .padding(.horizontal, 16)
                 }
                 .padding(.top, 32)
-                
+
                 // Buttons
                 HStack(spacing: 12) {
                     if let secondaryButton = dialog.secondaryButton {
-                        DialogButton(button: secondaryButton, onDismiss: onDismiss)
+                        DialogButtonView(button: secondaryButton, onDismiss: onDismiss)
                     }
-                    
-                    DialogButton(button: dialog.primaryButton, onDismiss: onDismiss, isPrimary: true)
+
+                    DialogButtonView(button: dialog.primaryButton, onDismiss: onDismiss, isPrimary: true)
                 }
                 .padding(.horizontal, 16)
             }
@@ -61,11 +61,11 @@ public struct CustomDialogView: View {
     }
 }
 
-struct DialogButton: View {
+struct DialogButtonView: View {
     let button: DialogButton
     let onDismiss: () -> Void
     var isPrimary: Bool = false
-    
+
     var body: some View {
         Button(action: {
             button.action?()
@@ -80,14 +80,14 @@ struct DialogButton: View {
                 .cornerRadius(12)
         }
     }
-    
+
     private var buttonTextColor: Color {
         switch button.role {
         case .destructive, .default: return .white
         case .cancel: return .primary
         }
     }
-    
+
     private var buttonBackgroundColor: Color {
         switch button.role {
         case .destructive: return .red
