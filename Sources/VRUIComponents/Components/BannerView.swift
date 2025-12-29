@@ -2,6 +2,7 @@ import SwiftUI
 import VRStateManagement
 
 /// Banner view for displaying errors, success messages, etc.
+/// Uses only semantic colors from AppTheme, all other styling is built-in
 public struct BannerView: View {
     @Environment(\.appTheme) private var theme
 
@@ -23,17 +24,17 @@ public struct BannerView: View {
     }
 
     public var body: some View {
-        HStack(spacing: theme.spacingSM) {
+        HStack(spacing: 8) {
             Image(systemName: iconName)
                 .foregroundColor(textColor)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(theme.fontCallout.bold())
+                    .font(.callout.bold())
                     .foregroundColor(textColor)
-                
+
                 Text(message)
-                    .font(theme.fontCaption)
+                    .font(.caption)
                     .foregroundColor(textColor)
             }
 
@@ -44,12 +45,10 @@ public struct BannerView: View {
                     .foregroundColor(textColor)
             }
         }
-        .padding(theme.spacingMD)
+        .padding(16)
         .background(backgroundColor)
-        .cornerRadius(theme.cornerRadiusMD)
-        .shadow(
-            color: theme.shadowColor, radius: theme.shadowRadius, x: theme.shadowX, y: theme.shadowY
-        )
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
     }
 
     private var backgroundColor: Color {

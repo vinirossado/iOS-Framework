@@ -1,13 +1,14 @@
 import SwiftUI
 
-/// Generic card component with customizable styling
+/// Reusable card component with consistent styling
+/// Uses only surfaceColor from AppTheme, all other styling is built-in
 public struct Card<Content: View>: View {
     @Environment(\.appTheme) private var theme
     
-    private let content: Content
-    private let padding: CGFloat?
-    private let cornerRadius: CGFloat?
-    private let shadowEnabled: Bool
+    let content: Content
+    let padding: CGFloat?
+    let cornerRadius: CGFloat?
+    let shadowEnabled: Bool
     
     public init(
         padding: CGFloat? = nil,
@@ -23,14 +24,14 @@ public struct Card<Content: View>: View {
     
     public var body: some View {
         content
-            .padding(padding ?? theme.spacingMD)
+            .padding(padding ?? 16)
             .background(theme.surfaceColor)
-            .cornerRadius(cornerRadius ?? theme.cornerRadiusMD)
+            .cornerRadius(cornerRadius ?? 12)
             .shadow(
-                color: shadowEnabled ? theme.shadowColor : .clear,
-                radius: shadowEnabled ? theme.shadowRadius : 0,
-                x: shadowEnabled ? theme.shadowX : 0,
-                y: shadowEnabled ? theme.shadowY : 0
+                color: shadowEnabled ? Color.black.opacity(0.1) : .clear,
+                radius: shadowEnabled ? 4 : 0,
+                x: 0,
+                y: shadowEnabled ? 2 : 0
             )
     }
 }

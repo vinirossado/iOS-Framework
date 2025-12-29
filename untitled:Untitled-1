@@ -1,0 +1,269 @@
+
+// MARK: - Preview
+
+#Preview {
+    // Mock data for preview
+    let mockPlaces = [
+        PlaceDisplayModel(
+            id: 1,
+            name: "Eiffel Tower",
+            address: "Champ de Mars, 5 Avenue Anatole France",
+            category: PlaceCategory.restaurant,
+            isVisited: true
+        ),
+        PlaceDisplayModel(
+            id: 2,
+            name: "Louvre Museum",
+            address: "Rue de Rivoli, 75001 Paris",
+            category: PlaceCategory.attraction,
+            isVisited: false
+        )
+    ]
+    
+    let mockCity = CityDisplayModel(
+        id: 1,
+        name: "Paris",
+        country: "France",
+        countryCode: "FR",
+        startDate: Date(),
+        endDate: Date().addingTimeInterval(86400 * 3), // 3 days later
+        places: mockPlaces
+    )
+    
+    let mockStats = TripStats(
+        totalCosts: 1250.0,
+        currency: "EUR",
+        totalPlaces: 2,
+        visitedPlaces: 1
+    )
+    
+    let mockDisplayModel = TripDetailDisplayModel(
+        id: 1,
+        name: "European Adventure",
+        cities: [mockCity],
+        places: mockPlaces,
+        stats: mockStats
+    )
+    
+    // Mock state
+    let mockThemeManager = MockThemeManager()
+    
+    return TripDetailPlacesSection(
+        displayModel: mockDisplayModel,
+        expandedSections: .constant(["places"]),
+        expandedCities: .constant([1]),
+        showingAddCity: .constant(false),
+        showingAddPlace: .constant(false),
+        editingPlace: .constant(nil),
+        editingCity: .constant(nil),
+        selectedCityForNewPlace: .constant(nil),
+        pendingDeletedPlaces: .constant([]),
+        toggleSection: { _ in },
+        deletePlace: { _, _ in },
+        isPendingDeletion: { _, _ in false },
+        isNewItem: { _ in false }
+    )
+    .environmentObject(mockThemeManager)
+    .theme(DefaultTheme())
+}
+
+// MARK: - Mock Data Models
+
+struct TripDetailDisplayModel: Identifiable {
+    let id: Int64
+    let name: String
+    let cities: [CityDisplayModel]
+    let places: [PlaceDisplayModel]
+    let stats: TripStats
+}
+
+struct CityDisplayModel: Identifiable {
+    let id: Int64
+    let name: String
+    let country: String
+    let countryCode: String?
+    let startDate: Date
+    let endDate: Date
+    let places: [PlaceDisplayModel]
+    
+    var duration: Int {
+        Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
+    }
+}
+
+struct PlaceDisplayModel: Identifiable {
+    let id: Int64
+    let name: String
+    let address: String?
+    let category: PlaceCategory
+    let isVisited: Bool
+}
+
+enum PlaceCategory {
+    case restaurant, attraction, hotel, shopping, entertainment, transportation, other
+    
+    var displayName: String {
+        switch self {
+        case .restaurant: return "Restaurant"
+        case .attraction: return "Attraction"
+        case .hotel: return "Hotel"
+        case .shopping: return "Shopping"
+        case .entertainment: return "Entertainment"
+        case .transportation: return "Transportation"
+        case .other: return "Other"
+        }
+    }
+    
+    var icon: String {
+        switch self {
+        case .restaurant: return "fork.knife"
+        case .attraction: return "camera"
+        case .hotel: return "bed.double"
+        case .shopping: return "bag"
+        case .entertainment: return "music.note"
+        case .transportation: return "car"
+        case .other: return "mappin"
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .restaurant: return .orange
+        case .attraction: return .blue
+        case .hotel: return .purple
+        case .shopping: return .green
+        case .entertainment: return .pink
+        case .transportation: return .gray
+        case .other: return .secondary
+        }
+    }
+}
+
+struct TripStats {
+    let totalCosts: Double
+    let currency: String
+    let totalPlaces: Int
+    let visitedPlaces: Int
+}
+
+// MARK: - Mock Theme Manager
+
+class MockThemeManager: ObservableObject {
+    @Published var currentTheme: any AppTheme = DefaultTheme()
+}
+
+// MARK: - Mock Services
+
+class CountryService {
+    static func flagEmoji(countryCode: String) -> String {
+        let base: UInt32 = 127397
+        var flag = ""
+        for scalar in countryCode.uppercased().unicodeScalars {
+            flag.append(String(UnicodeScalar(base + scalar.value)!))
+        }
+        return flag
+    }
+}
+
+// MARK: - Color Extensions
+
+extension Color {
+    static func appCardBackground(for theme: any AppTheme) -> Color {
+        theme.surfaceColor
+    }
+    
+    static func appPrimaryText(for theme: any AppTheme) -> Color {
+        theme.textPrimaryColor
+    }
+}
+
+// MARK: - ExpandableSection Component
+
+struct ExpandableSection<Content: View>: View {
+    let id: String
+    let title: String
+    let icon: String
+    let iconColor: Color
+    let count: Int
+    let subtitle: String?
+    let isExpanded: Bool
+    let content: () -> Content
+    let onToggle: () -> Void
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Header
+            Button(action: onToggle) {
+                HStack(spacing: 12) {
+                    ZStack {
+                        Circle()
+                            .fill(iconColor.opacity(0.15))
+                            .frame(width: 40, height: 40)
+                        
+                        Image(systemName: icon)
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(iconColor)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack(spacing: 8) {
+                            Text(title)
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(.primary)
+                            
+                            if count > 0 {
+                                Text("\(count)")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(
+                                        Capsule()
+                                            .fill(iconColor)
+                                    )
+                            }
+                        }
+                        
+                        if let subtitle = subtitle {
+                            Text(subtitle)
+                                .font(.system(size: 14))
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.secondary)
+                }
+                .padding()
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            
+            // Content
+            if isExpanded {
+                content()
+                    .padding(.horizontal)
+                    .padding(.bottom)
+            }
+        }
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .padding(.horizontal)
+        .padding(.vertical, 6)
+    }
+}
+
+// MARK: - Currency Extension
+
+extension Double {
+    func asCurrencyString(currencyCode: String) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = currencyCode
+        return formatter.string(from: NSNumber(value: self)) ?? "\(self)"
+    }
+}
+
